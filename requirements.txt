@@ -1,0 +1,10 @@
+eventkit==1.0.3
+ib-insync==0.9.86
+iniconfig==2.3.0
+nest-asyncio==1.6.0
+numpy==2.4.4
+packaging==26.0
+pluggy==1.6.0
+Pygments==2.20.0
+pytest==9.0.2
+pytest-asyncio==1.3.0

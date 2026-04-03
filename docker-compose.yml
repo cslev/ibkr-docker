@@ -1,0 +1,25 @@
+services:
+  ib-gateway:
+    image: cslev/ibkr-docker:latest
+    container_name: ib_gateway
+    restart: unless-stopped
+    ulimits:
+      nofile: 10000
+    environment:
+      - GATEWAY_OR_TWS=gateway
+      - TWOFA_TIMEOUT_ACTION=restart
+      - USERNAME=$USERNAME
+      - PASSWORD=$PASSWORD
+      - IBC_TradingMode=live
+      - IBC_ReadOnlyApi=no
+    ports:
+      # noVNC web browser access (no VNC client needed)
+      - "6080:6080"
+      # TWS API - automatically forwards correct port (4001/4002) to 8888
+      - "8888:8888"
+    healthcheck:
+      test: ["CMD-SHELL", "nc -z localhost 8888"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
