@@ -4,9 +4,7 @@ A fully containerized **IB Gateway** and **Trader Workstation (TWS)** Docker ima
 
 > Based on [extrange/ibkr-docker](https://github.com/extrange/ibkr-docker) as a starting point, refactored for multi-arch support and simplified build architecture.
 
-**IB Gateway**
-
-![](vnc_browser.png)
+![IB-gateway VNC in browser](vnc_browser.png)
 
 ---
 
@@ -129,13 +127,20 @@ The container automatically forwards the correct internal port to `8888` based o
 
 ### How do I persist TWS settings across restarts?
 
-Set `TWS_SETTINGS_PATH` to a path inside the container and bind-mount it:
+The provided `docker-compose.yml` already has this configured — settings are stored in `./tws-settings/` next to your compose file and survive container restarts and image updates:
 
 ```yaml
 environment:
-  TWS_SETTINGS_PATH: /settings
+  - TWS_SETTINGS_PATH=/settings
 volumes:
-  - ./settings:/settings:rw
+  - ./tws-settings:/settings
+```
+
+The `tws-settings/` directory is created automatically by Docker on first run. If you use `docker run` instead, add these flags manually:
+
+```bash
+-e TWS_SETTINGS_PATH=/settings \
+-v "$PWD/tws-settings:/settings" \
 ```
 
 ### Error: `unable to allocate file descriptor table - out of memory`

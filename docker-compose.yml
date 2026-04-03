@@ -12,6 +12,9 @@ services:
       - PASSWORD=$PASSWORD
       - IBC_TradingMode=live
       - IBC_ReadOnlyApi=no
+      - TWS_SETTINGS_PATH=/settings
+    volumes:
+      - ./tws-settings:/settings
     ports:
       # noVNC web browser access (no VNC client needed)
       - "6080:6080"
