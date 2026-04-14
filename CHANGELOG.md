@@ -4,18 +4,19 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-## [Unreleased]
+## [1.1] - 2026-04-14
 
 ### Fixed
 - **Healthcheck**: replaced `nc -z localhost 8888` with `socat /dev/null TCP:localhost:8888,connect-timeout=5` — `netcat` is not installed in the image; `socat` is
 - Bumped healthcheck `start_period` from 60s to 90s to allow more time for IB Gateway login and 2FA before the first check
 - Trimmed trailing whitespace in `docker-compose.yml`
+- **Java timezone**: `JAVA_TOOL_OPTIONS` is silently stripped by the install4j launcher before the JVM starts; `-Duser.timezone` is now injected directly into `ibgateway.vmoptions` (under `### keep on update`) which survives IB Gateway auto-updates and cannot be stripped by the launcher
 
 ### Added
 - **Timezone support**: host `/etc/timezone` and `/etc/localtime` are now mounted read-only into the container via `docker-compose.yml` volumes
 - `TZ` environment variable added to `docker-compose.yml` (defaults to `Asia/Singapore`); adjust to your local timezone
-- `JAVA_TOOL_OPTIONS=-Duser.timezone=$TZ` exported in `start.sh` so the IB Gateway JVM picks up the correct timezone (Java ignores `/etc/localtime` without this)
 - `tzdata` package added to the Dockerfile apt install to ensure timezone data is available in the image
+- `start.sh` dynamically locates `ibgateway.vmoptions` and appends `-Duser.timezone=$TZ` on first container start (idempotent — skips if already present)
 
 ---
 
