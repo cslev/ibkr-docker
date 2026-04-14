@@ -21,6 +21,8 @@ A fully containerized **IB Gateway** and **Trader Workstation (TWS)** Docker ima
 
 ## Quick Start
 
+The image is published on Docker Hub as [`cslev/ibkr-docker`](https://hub.docker.com/r/cslev/ibkr-docker) for both `linux/amd64` and `linux/arm64` (Raspberry Pi). No build step required — just pull and run.
+
 ### Using `docker compose` (recommended)
 
 1. Copy `.env.example` to `.env` and fill in your credentials:
@@ -39,6 +41,8 @@ PASSWORD=your_ibkr_password
 ```bash
 docker compose up -d
 ```
+
+The image is pulled automatically from Docker Hub on first run.
 
 3. Open [http://localhost:6080](http://localhost:6080) in your browser to see the Gateway UI.
 
@@ -83,7 +87,15 @@ Variables prefixed with `IBC_` override settings in [IBC Alpha's `config.ini`][c
 
 ## Docker Image
 
-The image is available on [Docker Hub](https://hub.docker.com/r/cslev/ibkr-docker) as `cslev/ibkr-docker:latest`.
+The image is published on [Docker Hub](https://hub.docker.com/r/cslev/ibkr-docker):
+
+```bash
+docker pull cslev/ibkr-docker:latest
+```
+
+Available tags:
+- `latest` — always the most recent stable build
+- `v1.1`, `v1.0`, … — pinned version tags
 
 ---
 
