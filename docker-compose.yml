@@ -13,8 +13,11 @@ services:
       - IBC_TradingMode=live
       - IBC_ReadOnlyApi=no
       - TWS_SETTINGS_PATH=/settings
+      - TZ=Asia/Singapore # Set your timezone here (e.g., "America/New_York", "Europe/London", etc.)
     volumes:
       - ./tws-settings:/settings
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro   
     ports:
       # noVNC web browser access (no VNC client needed)
       - "6080:6080"

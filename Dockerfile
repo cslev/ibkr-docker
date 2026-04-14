@@ -7,6 +7,7 @@ ENV IBC_VERSION=3.22.0
 RUN apt-get update && \
     apt-get install --no-install-recommends -y \
     ca-certificates git libxtst6 libgtk-3-0 openbox procps python3 socat tigervnc-standalone-server unzip wget2 xterm \
+    tzdata \
     libasound2 \
     libnss3 \
     libgbm1 \
