@@ -5,12 +5,11 @@ set -Eeuo pipefail
 
 export DISPLAY=:0
 
-# Configure timezone for both the OS and the Java runtime.
-# Java ignores TZ and /etc/localtime — it needs /etc/timezone (text file)
-# and the -Duser.timezone JVM flag to reliably pick up the correct zone.
+# Configure timezone for the Java runtime.
+# /etc/localtime and /etc/timezone are mounted read-only from the host via
+# docker-compose volumes, so the OS timezone is already correct.
+# Java ignores those files unless told explicitly via -Duser.timezone.
 if [[ -n ${TZ:-} ]]; then
-    ln -snf /usr/share/zoneinfo/$TZ /etc/localtime
-    echo "$TZ" > /etc/timezone
     export JAVA_TOOL_OPTIONS="${JAVA_TOOL_OPTIONS:-} -Duser.timezone=$TZ"
 fi
 
