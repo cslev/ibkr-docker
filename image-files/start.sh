@@ -8,9 +8,14 @@ export DISPLAY=:0
 # Configure timezone for the Java runtime.
 # /etc/localtime and /etc/timezone are mounted read-only from the host via
 # docker-compose volumes, so the OS timezone is already correct.
-# Java ignores those files unless told explicitly via -Duser.timezone.
+# JAVA_TOOL_OPTIONS is stripped by install4j before the JVM starts, so we
+# inject -Duser.timezone directly into ibgateway.vmoptions under the
+# "### keep on update" section, which survives IB Gateway auto-updates.
 if [[ -n ${TZ:-} ]]; then
-    export JAVA_TOOL_OPTIONS="${JAVA_TOOL_OPTIONS:-} -Duser.timezone=$TZ"
+    VMOPTIONS=$(find /root/Jts -name "ibgateway.vmoptions" 2>/dev/null | head -1)
+    if [[ -n $VMOPTIONS ]] && ! grep -q "Duser.timezone" "$VMOPTIONS"; then
+        echo "-Duser.timezone=$TZ" >> "$VMOPTIONS"
+    fi
 fi
 
 # Clear previous lockfile
