@@ -17,7 +17,7 @@ services:
     volumes:
       - ./tws-settings:/settings
       - /etc/timezone:/etc/timezone:ro
-      - /etc/localtime:/etc/localtime:ro   
+      - /etc/localtime:/etc/localtime:ro
     ports:
       # noVNC web browser access (no VNC client needed)
       - "6080:6080"
