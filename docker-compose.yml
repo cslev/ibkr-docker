@@ -21,8 +21,8 @@ services:
       # TWS API - automatically forwards correct port (4001/4002) to 8888
       - "8888:8888"
     healthcheck:
-      test: ["CMD-SHELL", "nc -z localhost 8888"]
+      test: ["CMD-SHELL", "socat /dev/null TCP:localhost:8888,connect-timeout=5"]
       interval: 30s
       timeout: 10s
       retries: 3
-      start_period: 60s
+      start_period: 90s
