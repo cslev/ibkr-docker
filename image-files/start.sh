@@ -67,6 +67,17 @@ socat -d -d TCP-LISTEN:8888,fork TCP:127.0.0.1:${port} &
 # Hacky way to get the major version for IB Gateway/TWS
 TWS_MAJOR_VERSION=$(ls ~/Jts/ibgateway/.)
 
+# IBC's own Java auto-detection can land on a stale install4j extraction
+# path instead of the permanent bundled JRE (seen on arm64 Gateway 1051:
+# it reported a build-time scratch dir that no longer exists). The real
+# JRE is always under the installed version directory, so locate it
+# ourselves and pass it explicitly instead of relying on IBC's guess.
+# IBC wants the directory containing the "java" binary, not the binary
+# itself -- it appends "/java" on to whatever --java-path is given.
+JAVA_BIN=$(find ~/Jts/ibgateway/"$TWS_MAJOR_VERSION" -maxdepth 3 -type f -iname java 2>/dev/null | head -1)
+JAVA_PATH_ARG=()
+[[ -n $JAVA_BIN ]] && JAVA_PATH_ARG=("--java-path=$(dirname "$JAVA_BIN")")
+
 # Override /opt/ibc/config.ini with environment variables
 ./replace.sh ~/ibc/config.ini
 
@@ -78,4 +89,5 @@ exec /opt/ibc/scripts/ibcstart.sh "${TWS_MAJOR_VERSION}" $command \
     "--user=${USERNAME:-}" \
     "--pw=${PASSWORD:-}" \
     "--on2fatimeout=${TWOFA_TIMEOUT_ACTION:-restart}" \
-    "--tws-settings-path=${TWS_SETTINGS_PATH:-}"
+    "--tws-settings-path=${TWS_SETTINGS_PATH:-}" \
+    "${JAVA_PATH_ARG[@]}"
