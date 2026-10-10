@@ -4,6 +4,14 @@ All notable changes to this project will be documented in this file.
 
 ---
 
+## [1.2] - 2026-10-10
+
+### Fixed
+- **IB System Error 2172**: rebuilt and republished the image to pull IBKR's current standalone installer (Gateway 1045.1 → 1051), resolving the desupport warning ahead of IBKR's 2026-12-15 cutoff (minimum supported version 1050.1)
+- **Java path on arm64**: IBC's bundled-JRE auto-detection reported a stale install4j extraction scratch path from build time instead of the permanent JRE under the installed version directory, causing `Can't find suitable Java installation` on Gateway 1051 (arm64). `start.sh` now locates `java` under `~/Jts/ibgateway/<version>/` itself and passes `--java-path` (the directory containing the binary — IBC appends `/java` itself) explicitly instead of relying on IBC's detection
+
+---
+
 ## [1.1] - 2026-04-14
 
 ### Fixed
